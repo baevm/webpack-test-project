@@ -1,13 +1,8 @@
-import React, { useEffect } from 'react'
 import avatarJpg from '@/assets/avatar.jpg'
-import AvatarSvg from '@/assets/avatar.svg'
 import avatarPng from '@/assets/avatar.png'
+import AvatarSvg from '@/assets/avatar.svg?react'
 
 const AboutPage = () => {
-  useEffect(() => {
-    throw new Error('test')
-  })
-
   return (
     <div>
       <div>

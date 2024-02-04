@@ -5,6 +5,8 @@ import TestComponent from './components/TestComponent'
 const App = () => {
   const [counter, setCounter] = useState(0)
 
+  const testTs: number = 5
+
   return (
     <div>
       <h1>Hello world</h1>
@@ -17,7 +19,7 @@ const App = () => {
       <TestComponent />
       <button onClick={() => setCounter((prev) => prev + 1)}>+1</button>
       {counter}
-
+      {testTs}
       <div>
         <Outlet />
       </div>

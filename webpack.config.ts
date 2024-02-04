@@ -17,6 +17,79 @@ interface Env {
 export default (env: Env) => {
   const isDev = env.mode === 'development'
 
+  const tsloader = () => ({
+    test: /\.tsx?$/,
+    use: {
+      loader: 'ts-loader',
+      options: {
+        getCustomTransformers: () => ({
+          before: [isDev && ReactRefreshTypeScript()].filter(Boolean),
+        }),
+        transpileOnly: isDev,
+      },
+    },
+    exclude: /node-modules/,
+  })
+
+  const babelLoader = () => ({
+    test: /\.(js|ts)x?$/,
+    exclude: /node_modules/,
+    use: {
+      loader: 'babel-loader',
+      options: {
+        presets: [
+          '@babel/preset-env',
+          '@babel/preset-typescript',
+          ['@babel/preset-react', { runtime: isDev ? 'automatic' : 'classic' }],
+        ],
+      },
+    },
+  })
+
+  const swcLoader = () => ({
+    test: /\.(js|ts)x?$/,
+    exclude: /(node_modules)/,
+    use: {
+      loader: 'swc-loader',
+      options: {
+        module: {
+          type: 'es6',
+        },
+        minify: !isDev,
+        isModule: true,
+        jsc: {
+          minify: {
+            compress: true,
+            mangle: true,
+            format: {
+              asciiOnly: true,
+            },
+          },
+          target: 'es2016',
+          parser: {
+            syntax: 'typescript',
+            tsx: true,
+          },
+          transform: {
+            react: {
+              runtime: 'automatic',
+            },
+          },
+        },
+      },
+    },
+  })
+
+  const esbuildLoader = () => ({
+    test: /\.[jt]sx?$/,
+    exclude: /node_modules/,
+    loader: 'esbuild-loader',
+    options: {
+      target: 'es2015',
+      loader: 'tsx',
+    },
+  })
+
   const config: webpack.Configuration = {
     mode: env.mode ?? 'development',
     entry: path.resolve(__dirname, 'src', 'index.tsx'),
@@ -60,19 +133,7 @@ export default (env: Env) => {
           issuer: /\.[jt]sx?$/,
           use: [{ loader: '@svgr/webpack', options: { icon: true } }],
         },
-        {
-          test: /\.tsx?$/,
-          use: {
-            loader: 'ts-loader',
-            options: {
-              getCustomTransformers: () => ({
-                before: [isDev && ReactRefreshTypeScript()].filter(Boolean),
-              }),
-              transpileOnly: isDev,
-            },
-          },
-          exclude: /node-modules/,
-        },
+        esbuildLoader(),
       ],
     },
     resolve: {
