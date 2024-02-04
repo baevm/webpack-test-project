@@ -1,28 +1,28 @@
-import React, {useState} from 'react';
-import TestComponent from "./components/TestComponent";
-import {Link, Outlet} from "react-router-dom";
+import { useState } from 'react'
+import { Link, Outlet } from 'react-router-dom'
+import TestComponent from './components/TestComponent'
 
 const App = () => {
-    const [counter, setCounter] = useState(0)
+  const [counter, setCounter] = useState(0)
 
-    return (
-        <div>
-            <h1>Hello world</h1>
-            <div>
-                <Link to={'/about'}>about</Link>
-                <br />
-                <Link to={'/cart'}>cart</Link>
+  return (
+    <div>
+      <h1>Hello world</h1>
+      <div>
+        <Link to={'/about'}>about</Link>
+        <br />
+        <Link to={'/cart'}>cart</Link>
+      </div>
 
-            </div>
-        <TestComponent />
-            <button onClick={() => setCounter((prev) => prev + 1)}>+1</button>
-            {counter}
+      <TestComponent />
+      <button onClick={() => setCounter((prev) => prev + 1)}>+1</button>
+      {counter}
 
-            <div>
-                <Outlet />
-            </div>
-        </div>
-    );
-};
+      <div>
+        <Outlet />
+      </div>
+    </div>
+  )
+}
 
-export default App;
+export default App
